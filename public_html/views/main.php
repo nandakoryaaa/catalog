@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf8">
+	<meta charset="utf8">
 </head>
 <body>
 	<h2>Заметки</h2>
