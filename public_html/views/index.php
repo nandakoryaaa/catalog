@@ -20,8 +20,3 @@
     </tr>
 	<?php endforeach ?>
 </table>
-
-<?php
-$note;
-$aaa;
-?>

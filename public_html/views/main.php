@@ -8,4 +8,3 @@
 	<?php require("$view.php"); ?>
 </body>
 </html>
-
