@@ -66,7 +66,7 @@ function update($cn, $id) {
 		return;
 	}
 
-	render('main', 'form', $model);
+	render('main', 'form', html_convert($model));
 }
 
 function load_model(&$model, $data) {
@@ -99,7 +99,8 @@ function find_model($cn, $id) {
 
 function view($cn, $id) {
 	$model = find_model($cn, $id);
-	render('main', 'view', $model);
+	$m = html_convert($model);
+	render('main', 'view', html_br($m));
 }
 
 function delete($cn, $id) {
@@ -124,3 +125,20 @@ function render($container, $view, $data) {
 	require("../views/$container.php");
 }
 
+function html_convert($model) {
+	$out = [];
+	foreach($model as $key => $value) {
+		$out[$key] = htmlspecialchars($value);
+	}
+
+	return $out;
+}
+
+function html_br($model) {
+	$out = [];
+	foreach($model as $key => $value) {
+		$out[$key] = nl2br($value);
+	}
+
+	return $out;
+}
