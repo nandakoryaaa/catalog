@@ -60,7 +60,7 @@ function update($cn, $id) {
 		return;
 	}
 
-	render('main', 'category/form', html_convert($model));
+	render('main', 'category/form', ['model' => html_convert($model)]);
 }
 
 function load_model(&$model, $data) {
@@ -94,7 +94,7 @@ function find_model($cn, $id) {
 function view($cn, $id) {
 	$model = find_model($cn, $id);
 	$m = html_convert($model);
-	render('main', 'category/view', html_br($m));
+	render('main', 'category/view', ['model' => html_br($m)]);
 }
 
 function delete($cn, $id) {
@@ -112,10 +112,11 @@ function index($cn) {
 		'select * from category'
 	);
 
-	render('main', 'category/index', $resultset);
+	render('main', 'category/index', ['categories' => $resultset]);
 }
 
 function render($container, $view, $data) {
+	extract($data);
 	require("../views/$container.php");
 }
 

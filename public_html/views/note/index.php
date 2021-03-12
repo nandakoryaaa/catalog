@@ -9,7 +9,7 @@
 		<th></th>
 		<th></th>
 	</tr>
-	<?php foreach($data as $note) : ?>
+	<?php foreach($notes as $note) : ?>
 	<tr>
 		<td><?=$note['id']?></td>
 		<td><?=$note['date']?></td>

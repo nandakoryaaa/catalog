@@ -8,7 +8,7 @@
 		<th></th>
 		<th></th>
 	</tr>
-	<?php foreach($data as $category) : ?>
+	<?php foreach($categories as $category) : ?>
 	<tr>
 		<td><?=$category['id']?></td>
 		<td><?=$category['title']?></td>

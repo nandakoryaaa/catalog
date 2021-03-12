@@ -26,6 +26,7 @@ function get_param($name, $data) {
 function create_model() {
 	return [
 		'id' => null,
+		'category_id' => null,
 		'date' => date('Y-m-d H:i:s'),
 		'title' => null,
 		'content' => null
@@ -48,18 +49,19 @@ function update($cn, $id) {
 
 		if ($id) {
 			$query = 'update note set '
-			. 'date=' . quote($cn, $model['date'])
+			. 'category_id=' . quote($cn, $model['category_id'])
+			. ', date=' . quote($cn, $model['date'])
 			. ', title=' . quote($cn, $model['title'])
 			. ', content=' . quote($cn, $model['content'])
 			. ' where id=' . $id;
 		} else {
 			 $query = 'insert into note values(null'
+			. ', ' . quote($cn, $model['category_id'])
 			. ', ' . quote($cn, $model['date'])
 			. ', ' . quote($cn, $model['title'])
 			. ', ' . quote($cn, $model['content'])
 			. ')';
 		}
-
 		$result = mysqli_query($cn, $query);
 
 		header('Location: /controllers/note.php');
@@ -105,7 +107,7 @@ function find_model($cn, $id) {
 function view($cn, $id) {
 	$model = find_model($cn, $id);
 	$m = html_convert($model);
-	render('main', 'note/view', html_br($m));
+	render('main', 'note/view', ['model' => html_br($m)]);
 }
 
 function delete($cn, $id) {
@@ -123,7 +125,7 @@ function index($cn) {
 		'select * from note'
 	);
 
-	render('main', 'note/index', $resultset);
+	render('main', 'note/index', ['notes' => $resultset]);
 }
 
 function get_categories($cn) {
