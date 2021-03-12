@@ -26,14 +26,12 @@ function get_param($name, $data) {
 function create_model() {
 	return [
 		'id' => null,
-		'date' => date('Y-m-d H:i:s'),
 		'title' => null,
-		'content' => null
 	];
 }
 
 function validate_model($model) {
-	return $model['title'] && $model['content'];
+	return !empty($model['title']);
 }
 
 function update($cn, $id) {
@@ -47,31 +45,22 @@ function update($cn, $id) {
 		load_model($model, $_POST);
 
 		if ($id) {
-			$query = 'update note set '
-			. 'date=' . quote($cn, $model['date'])
-			. ', title=' . quote($cn, $model['title'])
-			. ', content=' . quote($cn, $model['content'])
+			$query = 'update category set '
+			. 'title=' . quote($cn, $model['title'])
 			. ' where id=' . $id;
 		} else {
-			 $query = 'insert into note values(null'
-			. ', ' . quote($cn, $model['date'])
+			 $query = 'insert into category values(null'
 			. ', ' . quote($cn, $model['title'])
-			. ', ' . quote($cn, $model['content'])
 			. ')';
 		}
 
 		$result = mysqli_query($cn, $query);
 
-		header('Location: /controllers/note.php');
+		header('Location: /controllers/category.php');
 		return;
 	}
 
-	$categories = get_categories($cn);
-
-	render('main', 'note/form', [
-		'model' => html_convert($model),
-		'categories' => $categories
-	]);
+	render('main', 'category/form', html_convert($model));
 }
 
 function load_model(&$model, $data) {
@@ -91,7 +80,7 @@ function quote($cn, $value) {
 function find_model($cn, $id) {
 	$resultset = mysqli_query(
 		$cn,
-		'select * from note where id=' . quote($cn, $id)
+		'select * from category where id=' . quote($cn, $id)
 	);
 
 	$model = mysqli_fetch_assoc($resultset);
@@ -105,38 +94,28 @@ function find_model($cn, $id) {
 function view($cn, $id) {
 	$model = find_model($cn, $id);
 	$m = html_convert($model);
-	render('main', 'note/view', html_br($m));
+	render('main', 'category/view', html_br($m));
 }
 
 function delete($cn, $id) {
 	$model = find_model($cn, $id);
 	$result = mysqli_query(
 		$cn, 
-		'delete from note where id=' . quote($cn, $id)
+		'delete from category where id=' . quote($cn, $id)
 	);
-	header('Location: /controllers/note.php');
+	header('Location: /controllers/category.php');
 }
 
 function index($cn) {
 	$resultset = mysqli_query(
 		$cn,
-		'select * from note'
-	);
-
-	render('main', 'note/index', $resultset);
-}
-
-function get_categories($cn) {
-	$resultset = mysqli_query(
-		$cn,
 		'select * from category'
 	);
 
-	return $resultset;
+	render('main', 'category/index', $resultset);
 }
 
 function render($container, $view, $data) {
-	extract($data);
 	require("../views/$container.php");
 }
 
