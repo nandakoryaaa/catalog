@@ -4,6 +4,7 @@
 	<tr>
 		<th>ID</th>
 		<th>Дата</th>
+		<th>Категория<a>
 		<th>Тема</th>
 		<th></th>
 		<th></th>
@@ -13,6 +14,7 @@
 	<tr>
 		<td><?=$note['id']?></td>
 		<td><?=$note['date']?></td>
+		<td><?=$note['cat_title']?></td>
 		<td><?=$note['title']?></td>
 		<td><a href="/controllers/note.php?action=view&id=<?=$note['id']?>">Просмотр</a></td>
 		<td><a href="/controllers/note.php?action=update&id=<?=$note['id']?>">Редактировать</a></td>

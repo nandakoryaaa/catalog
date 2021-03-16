@@ -12,8 +12,8 @@
 	<br><br>
 	<label for="category_id">Категория</label><br>
 	<select name="category_id" id="category_id">
-		<?php foreach ($categories as $cat) : ?>
-		<option value="<?=$cat['id']?>"><?=$cat['title']?></option>
+		<?php foreach ($categories as $id => $title) : ?>
+		<option value="<?=$id?>"><?=$title?></option>
 		<?php endforeach ?>
 	</select>
 	<br><br>

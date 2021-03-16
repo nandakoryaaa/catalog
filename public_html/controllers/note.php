@@ -39,7 +39,7 @@ function validate_model($model) {
 
 function update($cn, $id) {
 	if ($id) {
-		$model = find_model($cn, $id);
+		$model = find_model($cn, 'note', $id);
 	} else {
 		$model = create_model();
 	}
@@ -90,10 +90,10 @@ function quote($cn, $value) {
 		. "'";
 }
 
-function find_model($cn, $id) {
+function find_model($cn, $table, $id) {
 	$resultset = mysqli_query(
 		$cn,
-		'select * from note where id=' . quote($cn, $id)
+		'select * from ' . $table . ' where id=' . quote($cn, $id)
 	);
 
 	$model = mysqli_fetch_assoc($resultset);
@@ -105,13 +105,21 @@ function find_model($cn, $id) {
 }
 
 function view($cn, $id) {
-	$model = find_model($cn, $id);
-	$m = html_convert($model);
-	render('main', 'note/view', ['model' => html_br($m)]);
+	$note = find_model($cn, 'note', $id);
+	$cat = find_model(
+			$cn,
+			'category',
+			$note['category_id']
+	);
+	$m = html_convert($note);
+	render('main', 'note/view', [
+		'note' => html_br($m),
+		'cat' => $cat
+	]);
 }
 
 function delete($cn, $id) {
-	$model = find_model($cn, $id);
+	$model = find_model($cn, 'note', $id);
 	$result = mysqli_query(
 		$cn, 
 		'delete from note where id=' . quote($cn, $id)
@@ -122,10 +130,14 @@ function delete($cn, $id) {
 function index($cn) {
 	$resultset = mysqli_query(
 		$cn,
-		'select * from note'
+		'select note.*, category.title as cat_title'
+		. ' from note left join category'
+		. ' on note.category_id = category.id'
 	);
 
-	render('main', 'note/index', ['notes' => $resultset]);
+	render('main', 'note/index', [
+		'notes' => $resultset
+	]);
 }
 
 function get_categories($cn) {
@@ -134,7 +146,14 @@ function get_categories($cn) {
 		'select * from category'
 	);
 
-	return $resultset;
+	$out = [];
+	foreach($resultset as $cat) {
+		$id = $cat['id'];
+		$title = $cat['title'];
+		$out[$id] = $title;
+	}
+
+	return $out;
 }
 
 function render($container, $view, $data) {
