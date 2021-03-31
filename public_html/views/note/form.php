@@ -13,7 +13,11 @@
 	<label for="category_id">Категория</label><br>
 	<select name="category_id" id="category_id">
 		<?php foreach ($categories as $id => $title) : ?>
-		<option value="<?=$id?>"><?=$title?></option>
+		<option value="<?=$id?>"<?php
+			if ($id == $model['category_id']) {
+				echo ' selected="true"';
+			}
+		?>><?=$title?></option>
 		<?php endforeach ?>
 	</select>
 	<br><br>

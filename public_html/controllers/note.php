@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $connection = mysqli_connect(
 	'localhost', 'cat', 'cat123', 'cat'
 );
@@ -106,11 +106,14 @@ function find_model($cn, $table, $id) {
 
 function view($cn, $id) {
 	$note = find_model($cn, 'note', $id);
-	$cat = find_model(
+	$cat = null;
+	if (!is_null($note['category_id'])) {
+		$cat = find_model(
 			$cn,
 			'category',
 			$note['category_id']
-	);
+		);
+	}
 	$m = html_convert($note);
 	render('main', 'note/view', [
 		'note' => html_br($m),

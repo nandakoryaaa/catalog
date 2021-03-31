@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $connection = mysqli_connect(
 	'localhost', 'cat', 'cat123', 'cat'
 );
@@ -99,10 +99,18 @@ function view($cn, $id) {
 
 function delete($cn, $id) {
 	$model = find_model($cn, $id);
-	$result = mysqli_query(
+	$id = quote($cn, $id);
+	mysqli_query(
 		$cn, 
-		'delete from category where id=' . quote($cn, $id)
+		'delete from category where id=' . $id
 	);
+	
+	mysqli_query(
+		$cn, 
+		'update note set category_id=NULL'
+		. ' where category_id=' . $id
+	);
+	
 	header('Location: /controllers/category.php');
 }
 

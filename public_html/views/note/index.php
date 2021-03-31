@@ -14,7 +14,13 @@
 	<tr>
 		<td><?=$note['id']?></td>
 		<td><?=$note['date']?></td>
-		<td><?=$note['cat_title']?></td>
+		<td><?php
+			if ($note['cat_title']) {
+				echo $note['cat_title'];
+			} else {
+				echo '<font color="red">Без категории</font>';
+			}
+		?></td>
 		<td><?=$note['title']?></td>
 		<td><a href="/controllers/note.php?action=view&id=<?=$note['id']?>">Просмотр</a></td>
 		<td><a href="/controllers/note.php?action=update&id=<?=$note['id']?>">Редактировать</a></td>
